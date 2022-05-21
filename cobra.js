@@ -14,6 +14,7 @@ var maca;
 var bola;
 
 var pontos;
+var score = 0;
 var maca_x;
 var maca_y;
 
@@ -25,9 +26,10 @@ var noJogo = true;
 
 const TAMANHO_PONTO = 10;
 const ALEATORIO_MAXIMO = 29;
-const ATRASO = 140;
-const C_ALTURA = 300;
-const C_LARGURA = 300;    
+const ATRASO = 240;
+//Definição da tela
+const C_ALTURA = 550;
+const C_LARGURA = 550;    
 
 const TECLA_ESQUERDA = 37;
 const TECLA_DIREITA = 39;
@@ -42,10 +44,27 @@ onkeydown = verificarTecla; // Define função chamada ao se pressionar uma tecl
 iniciar(); // Chama função inicial do jogo
 
 
-// Definição das funções
+// Definição da velocidade da cobra/jogo.
+function snake_speed(){
+    speed = pontos*10
+    if(speed<200){
+        return ATRASO - speed
+    }else{
+        return 40
+    }
+}
+
+//Registra os prontos do jogador. Chamada ao pontuar.
+function player_score(){
+    score = score + snake_speed()
+    console.log(score)
+}
 
 function iniciar() {
     tela = document.getElementById("tela");
+    //Tamanho da tela do jogo
+    tela.width = C_LARGURA
+    tela.height = C_ALTURA
     ctx = tela.getContext("2d");
 
 	ctx.fillStyle = "black";
@@ -91,7 +110,7 @@ function cicloDeJogo() {
         verificarColisao();
         mover();
         fazerDesenho();
-        setTimeout("cicloDeJogo()", ATRASO);
+        setTimeout("cicloDeJogo()", snake_speed());
     }
 }
 
@@ -99,6 +118,7 @@ function verificarMaca() {
     if ((x[0] == maca_x) && (y[0] == maca_y)) {
         pontos++;
         localizarMaca();
+        player_score();
     }
 }    
 
