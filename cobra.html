@@ -6,11 +6,23 @@
   </head>
 
   <body>
-    <canvas id="tela"></canvas>
+    <div id="score">
+      
+    </div>
+    <canvas id="tela" style="display: none;"></canvas>
     
-    <button id="startbtn" style="display: none;">Start</button>
     <audio id="music" src="./doomost.mp3" style="display: none;" loop></audio>
-
+    <div>
+      <button id="startbtn" style="display: ;">Start</button>
+      <div id="fim" style="display:none ;">
+        <input type="text" id="name" placeholder="Digite seu Nome" >
+        <button type="submit" id="savescore" >Salvar</button>
+      </div>
+    </div>
+    <div>
+      <h1>Ranking</h1>
+      <div id="rank"></div>
+    </div>
 
 
     <script src="cobra.js"></script>
