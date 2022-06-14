@@ -16,16 +16,17 @@ var pontos;
 var score = 0;
 var maca_x;
 var maca_y;
+var nivel = 1;
 
 var paraEsquerda = false;
 var paraDireita = true;
 var paraCima = false;
 var paraBaixo = false;
-var noJogo = true;
+var noJogo = false;
 
 const TAMANHO_PONTO = 10;
 const ALEATORIO_MAXIMO = 29;
-const ATRASO = 240;
+var ATRASO = 240;
 //Definição da tela
 const C_ALTURA = 550;
 const C_LARGURA = 550;
@@ -46,7 +47,7 @@ var y = [];
 
 onkeydown = verificarTecla; // Define função chamada ao se pressionar uma tecla
 
-iniciar(); // Chama função inicial do jogo
+//iniciar(); // Chama função inicial do jogo
 
 
 // Definição da velocidade da cobra/jogo.
@@ -62,16 +63,21 @@ function snake_speed() {
 //Registra os prontos do jogador. Chamada ao pontuar.
 function player_score() {
   score = score + snake_speed();
+  screenscore.innerText = `Score:${score}            Nivel:${nivel}`
   console.log(score);
 }
 
 function iniciar() {
+  noJogo = true
+  score = 0 
+  nivel = 1 
+  screenscore.innerText = `Score:${score}            Nivel:${nivel}`
   tela = document.getElementById("tela");
   //Tamanho da tela do jogo
   tela.width = C_LARGURA;
   tela.height = C_ALTURA;
   ctx = tela.getContext("2d");
-  ctx.fillStyle = "black";
+  ctx.fillStyle = "gray";
   ctx.fillRect(0, 0, C_LARGURA, C_ALTURA);
   carregarImagens();
   criarCobra();
@@ -120,6 +126,9 @@ function cicloDeJogo() {
 function verificarMaca() {
   if (x[0] == maca_x && y[0] == maca_y) {
     pontos++;
+    if(pontos%5==0)  {
+      nivel++;
+    }
     localizarMaca();
     player_score();
   }
@@ -192,11 +201,18 @@ function fazerDesenho() {
 }
 
 function fimDeJogo() {
+  tela.width = 150;
+  tela.height = 150;
+  ctx = tela.getContext("2d");
+  ctx.fillStyle = "black";
+  ctx.fillRect(0, 0, 150, 150)
   ctx.fillStyle = "white";
   ctx.textBaseline = "middle";
   ctx.textAlign = "center";
   ctx.font = "normal bold 18px serif";
-  ctx.fillText("Fim de Jogo", C_LARGURA / 2, C_ALTURA / 2);
+  ctx.fillText("Fim de Jogo", 150 / 2, 150 / 2);
+  startbtn.style.display = "";  
+  show_save.style.display ='';
 }
 
 function verificarTecla(e) {
@@ -228,17 +244,32 @@ function verificarTecla(e) {
 }
 
 
-
-
 //Extras
 const startbtn = document.getElementById("startbtn");
 const music = document.getElementById("music");
+const screencanvas = document.getElementById('tela');
+const screenscore = document.getElementById('score');
+const clickscore = document.getElementById('savescore')
+const player_name = document.getElementById('name');
+const rank = document.getElementById('rank')
+const show_save = document.getElementById('fim')
 
-//startbtn.style.display = "";
+//Save Score
+clickscore.addEventListener("click",() => {
+  show_save.style.display ='none';
+  node=document.createElement('li')
+  node.appendChild(document.createTextNode('Player:  '+player_name.value+'    Score: '+score))
+  rank.appendChild(node)
+  
+})
+
 //Evento da musica
 startbtn.addEventListener("click", () => {
-    //esconde o botão de play
+    //esconde o botão de play    
+    iniciar()
     startbtn.style.display = "none";
+    screencanvas.style.display = "";
+    
     music.play().then(() => {});
   });
 
